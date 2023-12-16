@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package antelope.action.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message ActionEvents {
+    repeated ActionEvent items = 1;
+}
+
+message ActionEvent {
+    // transaction
+    string trx_id = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    string contract = 3;
+    string action = 4;
+
+    // data payload
+    string data = 5;
+}

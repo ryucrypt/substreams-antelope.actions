@@ -1,0 +1,36 @@
+specVersion: v0.1.0
+package:
+  name: antelope_actions
+  version: v0.1.0
+  url: https://github.com/pinax-network/substreams
+  doc: Antelope based action traces.
+
+imports:
+  sink_files: https://github.com/streamingfast/substreams-sink-files/releases/download/v2.0.1/substreams-sink-files-v2.0.1.spkg
+
+binaries:
+  default:
+    type: wasm/rust-v1
+    file: target/wasm32-unknown-unknown/release/antelope_actions.wasm
+
+protobuf:
+  files:
+    - action.proto
+  importPaths:
+    - ./proto/v1
+
+modules:
+  - name: map_logactions
+    kind: map
+    inputs:
+      - params: string
+      - source: sf.antelope.type.v1.Block
+    output:
+      type: proto:antelope.action.v1.ActionEvents
+
+  - name: jsonl_out
+    kind: map
+    inputs:
+      - map: map_logactions
+    output:
+      type: proto:sf.substreams.sink.files.v1.Lines
